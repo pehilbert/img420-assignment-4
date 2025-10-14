@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://dxnm431nhdgv8"]
+
+[ext_resource type="Script" uid="uid://e4k6y22x1goc" path="res://Pickup.cs" id="1_iqk3k"]
+[ext_resource type="Texture2D" uid="uid://cuay8c7jrarxj" path="res://icon.svg" id="2_weqpt"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_amdaw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_weqpt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_weqpt"]
+size = Vector2(128, 128)
+
+[node name="Pickup" type="Area2D"]
+script = ExtResource("1_iqk3k")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_amdaw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_weqpt")
