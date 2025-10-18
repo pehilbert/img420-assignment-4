@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 /// <summary>
 /// A basic player controller for a 2D game.  This script demonstrates simple
@@ -11,14 +12,7 @@ using Godot;
 public partial class Player : CharacterBody2D
 {
 	[Export]
-	public float Speed = 200f;
-
-	// Negative value because in Godot, upward movement has a negative Y component.
-	[Export]
-	public float JumpVelocity = -300f;
-
-	[Export]
-	public float Gravity = 800f;
+	public float Speed = 100f;
 
 	private AnimatedSprite2D _anim;
 
@@ -31,32 +25,44 @@ public partial class Player : CharacterBody2D
 	public override void _PhysicsProcess(double delta)
 	{
 		// Obtain the current velocity so we can modify it
-		Vector2 v = Velocity;
+		Vector2 v = Vector2.Zero;
 
-		// Horizontal input: positive for right, negative for left
-		float inputX = Input.GetActionStrength("ui_right") - Input.GetActionStrength("ui_left");
-		v.X = inputX * Speed;
-
-		// Apply gravity every frame if not on the floor
-		v.Y += Gravity * (float)delta;
-
-		// Jump when the player presses the jump action (ui_accept) and the body is on the floor
-		if (IsOnFloor() && Input.IsActionJustPressed("ui_accept"))
+		if (Input.IsActionPressed("move_left"))
 		{
-			v.Y = JumpVelocity;
+			v.X -= Speed;
+		}
+		if (Input.IsActionPressed("move_right"))
+		{
+			v.X += Speed;
+		}
+		if (Input.IsActionPressed("move_up"))
+		{
+			v.Y -= Speed;
+		}
+		if (Input.IsActionPressed("move_down"))
+		{
+			v.Y += Speed;
 		}
 
 		// Assign the modified velocity back to the CharacterBody2D and move
-		Velocity = v;
+		Velocity = v.Normalized() * Speed;
 		MoveAndSlide();
 
 		// Flip and play animations based on movement
 		if (_anim != null)
 		{
-			if (Mathf.Abs(inputX) > 0.01f)
+			if (Math.Abs(v.X) > 0)
 			{
-				_anim.FlipH = inputX < 0;
-				_anim.Play("walk");
+				_anim.FlipH = v.X < 0;
+				_anim.Play("walk_side");
+			}
+			else if (v.Y > 0)
+			{
+				_anim.Play("walk_down");
+			}
+			else if (v.Y < 0)
+			{
+				_anim.Play("walk_up");
 			}
 			else
 			{
