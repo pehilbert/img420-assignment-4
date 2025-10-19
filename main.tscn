@@ -644,3 +644,23 @@ position = Vector2(542, 215)
 [node name="Enemy" parent="." instance=ExtResource("3_h2yge")]
 position = Vector2(240, 198)
 TargetPath = NodePath("../Player")
+
+[node name="Enemy2" parent="." instance=ExtResource("3_h2yge")]
+position = Vector2(159, 278)
+TargetPath = NodePath("../Player")
+
+[node name="Enemy3" parent="." instance=ExtResource("3_h2yge")]
+position = Vector2(264, 390)
+TargetPath = NodePath("../Player")
+
+[node name="Enemy4" parent="." instance=ExtResource("3_h2yge")]
+position = Vector2(443, 435)
+TargetPath = NodePath("../Player")
+
+[node name="Enemy5" parent="." instance=ExtResource("3_h2yge")]
+position = Vector2(542, 307)
+TargetPath = NodePath("../Player")
+
+[node name="Enemy6" parent="." instance=ExtResource("3_h2yge")]
+position = Vector2(411, 149)
+TargetPath = NodePath("../Player")

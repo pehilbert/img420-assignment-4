@@ -14,6 +14,9 @@ public partial class Enemy : CharacterBody2D
 	[Export]
 	public float Speed = 50f;
 
+	[Export]
+	public float DetectionRadius = 200f;
+
 	/// <summary>
 	/// Exposed NodePath to assign the target (e.g. Player) in the editor.
 	/// </summary>
@@ -23,7 +26,11 @@ public partial class Enemy : CharacterBody2D
 	private NavigationAgent2D _navAgent;
 	private Node2D _target;
 	private AnimatedSprite2D _anim;
-	
+	private bool _isChasing = false;
+
+	// Reuse a single RayCast2D instead of creating one every frame.
+	private RayCast2D _raycast;
+
 	public override void _Ready()
 	{
 		_navAgent = GetNode<NavigationAgent2D>("NavigationAgent2D");
@@ -35,6 +42,17 @@ public partial class Enemy : CharacterBody2D
 		{
 			_target = GetNode<Node2D>(TargetPath);
 		}
+
+		// Create and configure a RayCast2D once.
+		_raycast = new RayCast2D
+		{
+			// position the ray origin at the enemy's local origin (0,0)
+			Position = Vector2.Zero,
+			CollideWithAreas = true,
+			CollideWithBodies = true,
+			Enabled = true
+		};
+		AddChild(_raycast);
 
 		// Configure navigation agent properties if needed (e.g., max speed)
 		// _navAgent.MaxSpeed = Speed;
@@ -48,14 +66,59 @@ public partial class Enemy : CharacterBody2D
 		// Update the navigation target each frame to follow the player's current position
 		_navAgent.TargetPosition = _target.GlobalPosition;
 
-		// Retrieve the next point along the computed path
-		Vector2 nextPoint = _navAgent.GetNextPathPosition();
+		Vector2 distance = _target.GlobalPosition - GlobalPosition;
 
-		// Compute direction towards the next point
-		Vector2 direction = (nextPoint - GlobalPosition).Normalized();
+		// Update the raycast to point at the target and check line of sight. (assisted by GitHub Copilot)
+		_raycast.GlobalPosition = GlobalPosition;
+		_raycast.TargetPosition = _target.GlobalPosition - GlobalPosition;
+		_raycast.ForceRaycastUpdate();
 
-		// Move towards the target
-		Velocity = direction * Speed;
+		bool hasLineOfSight = false;
+
+		if (_raycast.IsColliding())
+		{
+			// If the first collider hit is the target, we have line of sight.
+			var collider = _raycast.GetCollider() as Node;
+			if (collider == _target)
+			{
+				hasLineOfSight = true;
+			}
+			else
+			{
+				// As a fallback, check whether the collision point is very near the target (in case of collider wrappers).
+				Vector2 collisionPoint = _raycast.GetCollisionPoint();
+				if (collisionPoint.DistanceTo(_target.GlobalPosition) < 8.0f)
+					hasLineOfSight = true;
+			}
+		}
+		else
+		{
+			// No collider was hit at all. If your player is a physics body this case probably won't happen;
+			// treat it as "no line of sight" unless you expect non-colliding targets.
+			hasLineOfSight = false;
+		}
+
+		// Begin chasing only if within detection radius AND we have line-of-sight.
+		if (distance.Length() <= DetectionRadius && hasLineOfSight)
+		{
+			_isChasing = true;
+		}
+
+		if (_isChasing)
+		{
+			// Retrieve the next point along the computed path
+			Vector2 nextPoint = _navAgent.GetNextPathPosition();
+
+			// Compute direction towards the next point
+			Vector2 direction = (nextPoint - GlobalPosition).Normalized();
+
+			// Move towards the target
+			Velocity = direction * Speed;
+		}
+		else
+		{
+			Velocity = Vector2.Zero;
+		}
 
 		if (Math.Abs(Velocity.Length()) > 0)
 		{

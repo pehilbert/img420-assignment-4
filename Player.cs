@@ -12,7 +12,7 @@ using System;
 public partial class Player : CharacterBody2D
 {
 	[Export]
-	public float Speed = 100f;
+	public float Speed = 80f;
 
 	private AnimatedSprite2D _anim;
 
