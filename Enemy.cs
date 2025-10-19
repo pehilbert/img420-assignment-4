@@ -1,4 +1,5 @@
 using Godot;
+using System;
 
 /// <summary>
 /// A simple enemy that uses a NavigationAgent2D to follow the player.  To use this
@@ -11,7 +12,7 @@ using Godot;
 public partial class Enemy : CharacterBody2D
 {
 	[Export]
-	public float Speed = 120f;
+	public float Speed = 50f;
 
 	/// <summary>
 	/// Exposed NodePath to assign the target (e.g. Player) in the editor.
@@ -21,10 +22,14 @@ public partial class Enemy : CharacterBody2D
 
 	private NavigationAgent2D _navAgent;
 	private Node2D _target;
+	private AnimatedSprite2D _anim;
 	
 	public override void _Ready()
 	{
 		_navAgent = GetNode<NavigationAgent2D>("NavigationAgent2D");
+		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+
+		_anim.Play("idle");
 
 		if (TargetPath != null)
 		{
@@ -51,6 +56,17 @@ public partial class Enemy : CharacterBody2D
 
 		// Move towards the target
 		Velocity = direction * Speed;
+
+		if (Math.Abs(Velocity.Length()) > 0)
+		{
+			_anim.FlipH = Velocity.X < 0;
+			_anim.Play("walk");
+		}
+		else
+		{
+			_anim.Play("idle");
+		}
+
 		MoveAndSlide();
 	}
 }
