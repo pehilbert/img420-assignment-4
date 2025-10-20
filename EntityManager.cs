@@ -34,8 +34,6 @@ public partial class EntityManager : Node2D
 
 	public override void _Ready()
 	{
-		CurrentHealth = MaxHealth;
-		EmitSignal(SignalName.HealthChanged, CurrentHealth, MaxHealth);
 
 		if (IFramesDuration > 0)
 		{
@@ -77,6 +75,9 @@ public partial class EntityManager : Node2D
 				healthBarTimer.Start();
 			};
 		}
+
+		CurrentHealth = MaxHealth;
+		EmitSignal(SignalName.HealthChanged, CurrentHealth, MaxHealth);
 	}
 
 	public void IFrames()
