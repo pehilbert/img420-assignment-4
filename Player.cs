@@ -13,13 +13,30 @@ public partial class Player : CharacterBody2D
 {
 	[Export]
 	public float Speed = 80f;
+	[Export]
+	public PackedScene FireballScene;
+	[Export]
+	public PackedScene ExplosionScene;
+	[Export]
+	public float FireballSpeed = 200f;
+	[Export]
+	public int Damage = 10;
+	[Export]
+	public float FireRate = 1.0f;
 
 	private AnimatedSprite2D _anim;
+	private bool _canFire = true;
+	private Timer _fireTimer;
 
 	public override void _Ready()
 	{
 		// Cache a reference to the AnimatedSprite2D for switching animations and flipping
 		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+
+		_fireTimer = new Timer();
+		_fireTimer.WaitTime = 1.0f / FireRate;
+		_fireTimer.Timeout += () => _canFire = true;
+		AddChild(_fireTimer);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -68,6 +85,52 @@ public partial class Player : CharacterBody2D
 			{
 				_anim.Play("idle");
 			}
+		}
+
+		// Fire a projectile if the fire action is pressed
+		if (Input.IsActionPressed("fire"))
+		{
+			fire();
+		}
+	}
+
+	private void fire()
+	{
+		if (_canFire)
+		{
+			_canFire = false;
+			_fireTimer.Start();
+
+			var bullet = FireballScene.Instantiate<RigidBody2D>();
+			bullet.Position = GlobalPosition;
+			var mousePos = GetGlobalMousePosition();
+
+			bullet.LookAt(mousePos);
+			bullet.LinearVelocity = (mousePos - GlobalPosition).Normalized() * FireballSpeed;
+
+			// Enable contact monitoring for collision detection
+			bullet.ContactMonitor = true;
+
+			bullet.BodyEntered += (Node body) =>
+			{
+				if (!(body is Player))
+				{
+					var entityManager = body.GetNodeOrNull<EntityManager>("EntityManager");
+					if (entityManager != null)
+					{
+						entityManager.TakeDamage(Damage);
+					}
+
+					var explosion = ExplosionScene.Instantiate<CpuParticles2D>();
+					explosion.Position = bullet.Position;
+					explosion.Emitting = true;
+					GetParent().AddChild(explosion);
+
+					bullet.QueueFree();
+				}
+			};
+
+			GetParent().AddChild(bullet);
 		}
 	}
 }

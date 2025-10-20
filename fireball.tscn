@@ -39,33 +39,37 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sf4mh"]
-radius = 26.0
-height = 52.0
+radius = 8.42243
+height = 16.8449
 
-[node name="Fireball" type="Area2D"]
+[node name="Fireball" type="RigidBody2D"]
+collision_layer = 4
+collision_mask = 10
+gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 4
+
+[node name="TrailParticles" type="CPUParticles2D" parent="."]
+position = Vector2(3, 0)
+amount = 30
+lifetime = 0.4
+direction = Vector2(-1, 0)
+spread = 20.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 20.0
+initial_velocity_max = 30.0
+angular_velocity_min = -20.0
+angular_velocity_max = 20.0
+color = Color(0.813246, 0.398812, 0.238521, 1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_lk87q")
-frame_progress = 0.449504
+frame_progress = 0.13986
 speed_scale = 3.0
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(9, 0)
-scale = Vector2(1.84, 0.745971)
+position = Vector2(6, 0)
+scale = Vector2(0.695853, -0.474922)
 shape = SubResource("CapsuleShape2D_sf4mh")
-
-[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
-amount = 30
-lifetime = 0.4
-direction = Vector2(-1, 0)
-spread = 10.0
-gravity = Vector2(0, 0)
-initial_velocity_min = 100.0
-initial_velocity_max = 200.0
-angular_velocity_min = -20.0
-angular_velocity_max = 20.0
-scale_amount_min = 2.0
-scale_amount_max = 6.0
-color = Color(0.813246, 0.398812, 0.238521, 1)

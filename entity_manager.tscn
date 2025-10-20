@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8pbqmy6pp6m8"]
+
+[ext_resource type="Script" uid="uid://dq35au82r2tdy" path="res://EntityManager.cs" id="1_x4ka6"]
+
+[node name="EntityManager" type="Node2D"]
+script = ExtResource("1_x4ka6")
+
+[node name="HealthBar" type="Polygon2D" parent="."]
+color = Color(0.533229, 0.252868, 0.117723, 1)
+polygon = PackedVector2Array(-40, 2.38419e-07, -40, 8, 40, 8, 40, 2.38419e-07)
+uv = PackedVector2Array(-160, -56, -160, 0, 184, 0, 184, -56)
+
+[node name="HealthBarProgress" type="Polygon2D" parent="HealthBar"]
+position = Vector2(-40, 0)
+color = Color(0.113725, 0.4, 0.321569, 1)
+polygon = PackedVector2Array(0, 2.38419e-07, 0, 8, 80, 8, 80, 2.38419e-07)
+uv = PackedVector2Array(-160, -56, -160, 0, 184, 0, 184, -56)
