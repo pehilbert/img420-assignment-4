@@ -17,6 +17,18 @@ public partial class Enemy : CharacterBody2D
 	[Export]
 	public float DetectionRadius = 200f;
 
+	[Export]
+	public float AttackRadius = 16f;
+
+	[Export]
+	public float AttackRange = 16f;
+
+	[Export]
+	public int AttackDamage = 10;
+
+	[Export]
+	public float AttackCooldown = 3.0f;
+
 	/// <summary>
 	/// Exposed NodePath to assign the target (e.g. Player) in the editor.
 	/// </summary>
@@ -27,6 +39,9 @@ public partial class Enemy : CharacterBody2D
 	private Node2D _target;
 	private AnimatedSprite2D _anim;
 	private bool _isChasing = false;
+	private bool _isAttacking = false;
+	private bool _canAttack = true;
+	private Timer _attackTimer;
 
 	// Reuse a single RayCast2D instead of creating one every frame.
 	private RayCast2D _raycast;
@@ -54,8 +69,17 @@ public partial class Enemy : CharacterBody2D
 		};
 		AddChild(_raycast);
 
-		// Configure navigation agent properties if needed (e.g., max speed)
-		// _navAgent.MaxSpeed = Speed;
+		_anim.AnimationFinished += AttackHit;
+		
+		_attackTimer = new Timer();
+		_attackTimer.WaitTime = AttackCooldown;
+		_attackTimer.Timeout += _attackTimer_Timeout;
+		AddChild(_attackTimer);
+	}
+
+	private void _attackTimer_Timeout()
+	{
+		_canAttack = true;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -68,6 +92,85 @@ public partial class Enemy : CharacterBody2D
 
 		Vector2 distance = _target.GlobalPosition - GlobalPosition;
 
+		// Begin chasing only if within detection radius AND we have line-of-sight.
+		if (distance.Length() <= DetectionRadius && IsTargetInLineOfSight())
+		{
+			_isChasing = true;
+		}
+
+		if (_isChasing && !_isAttacking && distance.Length() > AttackRadius)
+		{
+			// Retrieve the next point along the computed path
+			Vector2 nextPoint = _navAgent.GetNextPathPosition();
+
+			// Compute direction towards the next point
+			Vector2 direction = (nextPoint - GlobalPosition).Normalized();
+
+			// Move towards the target
+			Velocity = direction * Speed;
+		}
+		else
+		{
+			Velocity = Vector2.Zero;
+		}
+
+		// Update animation based on movement if not attacking
+		if (!_isAttacking)
+		{
+			if (_canAttack && distance.Length() <= AttackRadius && IsTargetInLineOfSight())
+			{
+				Attack();
+			}
+			else if (Math.Abs(Velocity.Length()) > 0)
+			{
+				_anim.FlipH = Velocity.X < 0;
+				_anim.Play("walk");
+			}
+			else
+			{
+				_anim.Play("idle");
+			}
+		}
+
+		MoveAndSlide();
+	}
+
+	private void Attack()
+	{
+		if (_isAttacking || !_canAttack)
+			return;
+		
+		_isAttacking = true;
+		_canAttack = false;
+		_anim.Play("attack");
+		_attackTimer.Start();
+	}
+
+	private void AttackHit()
+	{
+		if (_anim.Animation == "attack")
+		{
+			if (_target != null && IsTargetInLineOfSight())
+			{
+				Vector2 distance = _target.GlobalPosition - GlobalPosition;
+
+				if (distance.Length() <= AttackRange)
+				{
+					var entityManager = _target.GetNodeOrNull<EntityManager>("EntityManager");
+
+					if (entityManager != null)
+					{
+						entityManager.TakeDamage(AttackDamage);
+					}
+				}
+			}
+
+			_isAttacking = false;
+		}
+	}
+
+	private bool IsTargetInLineOfSight()
+	{
 		// Update the raycast to point at the target and check line of sight. (assisted by GitHub Copilot)
 		_raycast.GlobalPosition = GlobalPosition;
 		_raycast.TargetPosition = _target.GlobalPosition - GlobalPosition;
@@ -98,38 +201,6 @@ public partial class Enemy : CharacterBody2D
 			hasLineOfSight = false;
 		}
 
-		// Begin chasing only if within detection radius AND we have line-of-sight.
-		if (distance.Length() <= DetectionRadius && hasLineOfSight)
-		{
-			_isChasing = true;
-		}
-
-		if (_isChasing)
-		{
-			// Retrieve the next point along the computed path
-			Vector2 nextPoint = _navAgent.GetNextPathPosition();
-
-			// Compute direction towards the next point
-			Vector2 direction = (nextPoint - GlobalPosition).Normalized();
-
-			// Move towards the target
-			Velocity = direction * Speed;
-		}
-		else
-		{
-			Velocity = Vector2.Zero;
-		}
-
-		if (Math.Abs(Velocity.Length()) > 0)
-		{
-			_anim.FlipH = Velocity.X < 0;
-			_anim.Play("walk");
-		}
-		else
-		{
-			_anim.Play("idle");
-		}
-
-		MoveAndSlide();
+		return hasLineOfSight;
 	}
 }

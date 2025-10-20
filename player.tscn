@@ -267,6 +267,8 @@ ExplosionScene = ExtResource("3_dw050")
 [node name="EntityManager" parent="." instance=ExtResource("2_2hs0m")]
 position = Vector2(0, 16)
 scale = Vector2(0.5, 0.5)
+MaxHealth = 100.0
+IFramesDuration = 0.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_i3pqv")

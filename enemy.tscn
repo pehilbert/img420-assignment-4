@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://ckdouu4tia4ji"]
+[gd_scene load_steps=34 format=3 uid="uid://ckdouu4tia4ji"]
 
 [ext_resource type="Script" uid="uid://cqh3symi7r8rb" path="res://Enemy.cs" id="1_7k104"]
 [ext_resource type="Texture2D" uid="uid://b56hjpil75bs6" path="res://assets/Skeletons_Free_Pack/Skeleton_Sword/Skeleton_White/Skeleton_With_VFX/Skeleton_01_White_Idle.png" id="2_4gyqm"]
@@ -37,14 +37,6 @@ region = Rect2(576, 0, 96, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_qku5p"]
 atlas = ExtResource("3_epg4t")
 region = Rect2(672, 0, 96, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l1fjw"]
-atlas = ExtResource("3_epg4t")
-region = Rect2(768, 0, 96, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b5wqg"]
-atlas = ExtResource("3_epg4t")
-region = Rect2(864, 0, 96, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qi2p4"]
 atlas = ExtResource("2_4gyqm")
@@ -144,14 +136,8 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qku5p")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_l1fjw")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_b5wqg")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack",
 "speed": 5.0
 }, {
@@ -243,8 +229,9 @@ radius = 8.0
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_qi2p4")
-animation = &"walk"
-frame_progress = 0.451094
+animation = &"attack"
+frame = 7
+frame_progress = 1.0
 speed_scale = 3.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
