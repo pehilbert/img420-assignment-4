@@ -1,9 +1,12 @@
-[gd_scene format=3 uid="uid://c7spysrkcbakv"]
+[gd_scene load_steps=2 format=3 uid="uid://c7spysrkcbakv"]
+
+[sub_resource type="Gradient" id="Gradient_tr7be"]
+colors = PackedColorArray(0.811765, 0.4, 0.239216, 1, 1, 1, 1, 0)
 
 [node name="ExplosionParticles" type="CPUParticles2D"]
 emitting = false
 amount = 30
-lifetime = 0.1
+lifetime = 0.2
 one_shot = true
 explosiveness = 1.0
 lifetime_randomness = 0.1
@@ -19,3 +22,4 @@ angular_velocity_max = 200.0
 scale_amount_min = 3.0
 scale_amount_max = 10.0
 color = Color(0.813246, 0.398812, 0.238521, 1)
+color_ramp = SubResource("Gradient_tr7be")

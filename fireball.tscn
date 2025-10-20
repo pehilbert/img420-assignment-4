@@ -65,7 +65,7 @@ color = Color(0.813246, 0.398812, 0.238521, 1)
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_lk87q")
-frame_progress = 0.13986
+frame_progress = 0.326052
 speed_scale = 3.0
 flip_h = true
 
