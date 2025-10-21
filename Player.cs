@@ -24,6 +24,11 @@ public partial class Player : CharacterBody2D
 	[Export]
 	public float FireRate = 1.0f;
 
+	public int Coins = 0;
+
+	[Signal]
+	public delegate void CoinsChangedEventHandler(int coins);
+
 	private AnimatedSprite2D _anim;
 	private bool _canFire = true;
 	private Timer _fireTimer;
@@ -92,6 +97,18 @@ public partial class Player : CharacterBody2D
 		{
 			fire();
 		}
+	}
+
+	public void AddCoins(int amount)
+	{
+		Coins += amount;
+		EmitSignal(SignalName.CoinsChanged, Coins);
+	}
+
+	public void SetCoins(int amount)
+	{
+		Coins = amount;
+		EmitSignal(SignalName.CoinsChanged, Coins);
 	}
 
 	private void fire()

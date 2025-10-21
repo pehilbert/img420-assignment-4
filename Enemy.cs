@@ -29,6 +29,15 @@ public partial class Enemy : CharacterBody2D
 	[Export]
 	public float AttackCooldown = 3.0f;
 
+	[Export]
+	public PackedScene CoinScene;
+
+	[Export]
+	public int MinCoinsDropped = 1;
+
+	[Export]
+	public int MaxCoinsDropped = 3;
+
 	/// <summary>
 	/// Exposed NodePath to assign the target (e.g. Player) in the editor.
 	/// </summary>
@@ -42,6 +51,7 @@ public partial class Enemy : CharacterBody2D
 	private bool _isAttacking = false;
 	private bool _canAttack = true;
 	private Timer _attackTimer;
+	private EntityManager _entityManager;
 
 	// Reuse a single RayCast2D instead of creating one every frame.
 	private RayCast2D _raycast;
@@ -50,6 +60,7 @@ public partial class Enemy : CharacterBody2D
 	{
 		_navAgent = GetNode<NavigationAgent2D>("NavigationAgent2D");
 		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		_entityManager = GetNode<EntityManager>("EntityManager");
 
 		_anim.Play("idle");
 
@@ -75,11 +86,37 @@ public partial class Enemy : CharacterBody2D
 		_attackTimer.WaitTime = AttackCooldown;
 		_attackTimer.Timeout += _attackTimer_Timeout;
 		AddChild(_attackTimer);
+
+		_entityManager.Died += OnDied;
 	}
 
 	private void _attackTimer_Timeout()
 	{
 		_canAttack = true;
+	}
+
+	private void OnDied(Node entityDied)
+	{
+		// Drop coins upon death
+		var rand = new Random();
+		int coinsToDrop = rand.Next(MinCoinsDropped, MaxCoinsDropped + 1);
+		for (int i = 0; i < coinsToDrop; i++)
+		{
+			if (CoinScene != null)
+			{
+				int xOffset = rand.Next(-8, 9);
+				int yOffset = rand.Next(-8, 9);
+
+				var coin = CoinScene.Instantiate<Node2D>();
+				coin.GlobalPosition = this.GlobalPosition + new Vector2(xOffset, yOffset);
+
+				// Defer adding to the scene tree to avoid changing physics state while flushing queries.
+				var parent = GetParent();
+				if (parent != null)
+					parent.CallDeferred("add_child", coin);
+			}
+		}
+		QueueFree();
 	}
 
 	public override void _PhysicsProcess(double delta)

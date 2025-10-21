@@ -1,0 +1,70 @@
+[gd_scene load_steps=11 format=3 uid="uid://clf4fcnaqassf"]
+
+[ext_resource type="Script" uid="uid://e4k6y22x1goc" path="res://Pickup.cs" id="1_0t63x"]
+[ext_resource type="Texture2D" uid="uid://b3m0twxfvb7ko" path="res://assets/coinsheet.png" id="1_d5gmh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d5gmh"]
+atlas = ExtResource("1_d5gmh")
+region = Rect2(0, 0, 115, 97)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0t63x"]
+atlas = ExtResource("1_d5gmh")
+region = Rect2(115, 0, 115, 97)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v7riw"]
+atlas = ExtResource("1_d5gmh")
+region = Rect2(230, 0, 115, 97)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pdq0q"]
+atlas = ExtResource("1_d5gmh")
+region = Rect2(345, 0, 115, 97)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w14il"]
+atlas = ExtResource("1_d5gmh")
+region = Rect2(460, 0, 115, 97)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4etq"]
+atlas = ExtResource("1_d5gmh")
+region = Rect2(575, 0, 115, 97)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_te2np"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d5gmh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0t63x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v7riw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pdq0q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w14il")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h4etq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_d5gmh"]
+radius = 8.0
+
+[node name="Coin" type="Area2D"]
+script = ExtResource("1_0t63x")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+sprite_frames = SubResource("SpriteFrames_te2np")
+frame_progress = 0.135298
+speed_scale = 3.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.648946, 0.652812)
+shape = SubResource("CircleShape2D_d5gmh")

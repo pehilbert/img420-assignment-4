@@ -1,9 +1,11 @@
-[gd_scene load_steps=28 format=4 uid="uid://blsjvn8rlc6xh"]
+[gd_scene load_steps=30 format=4 uid="uid://blsjvn8rlc6xh"]
 
 [ext_resource type="Texture2D" uid="uid://c60pg16854h45" path="res://assets/Tiled_files/walls_floor.png" id="1_oi3di"]
 [ext_resource type="PackedScene" uid="uid://cttyntev7r2h6" path="res://player.tscn" id="2_0b4ue"]
 [ext_resource type="PackedScene" uid="uid://ckdouu4tia4ji" path="res://enemy.tscn" id="3_f2txt"]
 [ext_resource type="Script" uid="uid://bv26ot1apoq37" path="res://Hud.cs" id="4_0b4ue"]
+[ext_resource type="Texture2D" uid="uid://cevfu2x873wk5" path="res://assets/heart.png" id="5_f2txt"]
+[ext_resource type="Texture2D" uid="uid://b3m0twxfvb7ko" path="res://assets/coinsheet.png" id="6_n6hdu"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_0xm2m"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -671,7 +673,35 @@ TargetPath = NodePath("../Player")
 script = ExtResource("4_0b4ue")
 
 [node name="HealthLabel" type="Label" parent="HUD"]
-offset_right = 40.0
-offset_bottom = 23.0
-theme_override_font_sizes/font_size = 24
-text = "Health: 0 / 0"
+offset_left = 64.0
+offset_top = 8.0
+offset_right = 204.0
+offset_bottom = 53.0
+theme_override_font_sizes/font_size = 32
+text = "0 / 0"
+
+[node name="HealthLogo" type="TextureRect" parent="HUD"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 56.0
+offset_bottom = 56.0
+texture = ExtResource("5_f2txt")
+expand_mode = 1
+
+[node name="CoinLabel" type="Label" parent="HUD"]
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 204.0
+offset_bottom = 109.0
+theme_override_font_sizes/font_size = 32
+text = "0"
+
+[node name="CoinLogo" type="TextureRect" parent="HUD"]
+offset_left = 8.0
+offset_top = 64.0
+offset_right = 104.0
+offset_bottom = 160.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_n6hdu")
+expand_mode = 1
+stretch_mode = 1

@@ -14,8 +14,16 @@ public partial class Pickup : Area2D
 	[Export]
 	public PackedScene ParticlesScene;
 
+	[Export]
+	public int Value = 1;
+
+	private AnimatedSprite2D _anim;
+
 	public override void _Ready()
 	{
+		_anim = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		_anim.Play("default");
+
 		// Connect the body_entered signal to detect when the player touches the pickup
 		Connect("body_entered", new Callable(this, nameof(OnBodyEntered)));
 	}
@@ -23,7 +31,7 @@ public partial class Pickup : Area2D
 	private void OnBodyEntered(Node2D body)
 	{
 		// Only react to the Player (customise this check as needed)
-		if (body is Player)
+		if (body is Player player)
 		{
 			// Spawn particle effect at pickup position
 			if (ParticlesScene != null)
@@ -35,6 +43,8 @@ public partial class Pickup : Area2D
 					GetParent().AddChild(particles);
 				}
 			}
+
+			player.AddCoins(Value);
 
 			// Remove the pickup from the scene
 			QueueFree();
