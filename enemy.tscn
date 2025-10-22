@@ -215,6 +215,7 @@ collision_layer = 2
 collision_mask = 7
 motion_mode = 1
 script = ExtResource("1_7k104")
+Speed = 84.0
 AttackRadius = 20.0
 AttackRange = 26.0
 CoinScene = ExtResource("2_3yqyl")
@@ -222,7 +223,7 @@ CoinScene = ExtResource("2_3yqyl")
 [node name="EntityManager" parent="." instance=ExtResource("2_iifgy")]
 position = Vector2(0, 19)
 scale = Vector2(0.3, 0.3)
-MaxHealth = 50.0
+MaxHealth = 30.0
 IFramesDuration = 0.0
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]

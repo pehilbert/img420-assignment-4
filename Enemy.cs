@@ -121,7 +121,7 @@ public partial class Enemy : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (_target == null || _navAgent == null)
+		if (_target == null || _navAgent == null || !IsInstanceValid(_target))
 			return;
 
 		// Update the navigation target each frame to follow the player's current position

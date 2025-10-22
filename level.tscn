@@ -1,9 +1,12 @@
-[gd_scene load_steps=30 format=4 uid="uid://blsjvn8rlc6xh"]
+[gd_scene load_steps=33 format=4 uid="uid://blsjvn8rlc6xh"]
 
 [ext_resource type="Texture2D" uid="uid://c60pg16854h45" path="res://assets/Tiled_files/walls_floor.png" id="1_oi3di"]
 [ext_resource type="PackedScene" uid="uid://cttyntev7r2h6" path="res://player.tscn" id="2_0b4ue"]
+[ext_resource type="PackedScene" uid="uid://ckdouu4tia4ji" path="res://enemy.tscn" id="3_f2txt"]
 [ext_resource type="Script" uid="uid://bv26ot1apoq37" path="res://Hud.cs" id="4_0b4ue"]
 [ext_resource type="Texture2D" uid="uid://cevfu2x873wk5" path="res://assets/heart.png" id="5_f2txt"]
+[ext_resource type="Script" uid="uid://dbm74hn12vscf" path="res://Shop.cs" id="5_km5ld"]
+[ext_resource type="PackedScene" uid="uid://ccdyn7cfma8wq" path="res://enemy_area.tscn" id="6_1ainy"]
 [ext_resource type="Texture2D" uid="uid://b3m0twxfvb7ko" path="res://assets/coinsheet.png" id="6_n6hdu"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_0xm2m"]
@@ -683,5 +686,157 @@ texture = ExtResource("6_n6hdu")
 expand_mode = 1
 stretch_mode = 1
 
+[node name="DeathScreen" type="Node2D" parent="HUD"]
+visible = false
+
+[node name="GameOverLabel" type="Label" parent="HUD/DeathScreen"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 472.0
+offset_top = 240.0
+offset_right = 678.0
+offset_bottom = 293.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 38
+text = "Game Over"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayAgainButton" type="Button" parent="HUD/DeathScreen"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 513.5
+offset_top = 303.0
+offset_right = 638.5
+offset_bottom = 345.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "Play again"
+
+[node name="Shop" type="Control" parent="HUD"]
+visible = false
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -20.0
+offset_right = -8.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_km5ld")
+
+[node name="DamageBoost" type="Button" parent="HUD/Shop"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 2.662
+anchor_top = 0.387
+anchor_right = 2.662
+anchor_bottom = 0.387
+offset_left = -118.48
+offset_top = -31.48
+offset_right = 164.52
+offset_bottom = 10.52
+theme_override_font_sizes/font_size = 24
+text = "+10% damage - 10 coins"
+
+[node name="FireRateBoost" type="Button" parent="HUD/Shop"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 2.7
+anchor_top = 1.387
+anchor_right = 2.7
+anchor_bottom = 1.387
+offset_left = -112.0
+offset_top = -15.48
+offset_right = 109.0
+offset_bottom = 15.52
+theme_override_font_sizes/font_size = 24
+text = "+5% fire rate - 10 coins"
+
+[node name="SpeedBoost" type="Button" parent="HUD/Shop"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 2.7
+anchor_top = 1.387
+anchor_right = 2.7
+anchor_bottom = 1.387
+offset_left = -152.0
+offset_top = 40.52
+offset_right = 211.0
+offset_bottom = 82.52
+theme_override_font_sizes/font_size = 24
+text = "+5% movement speed - 5 coins"
+
+[node name="ShopLabel" type="Label" parent="HUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -208.0
+offset_top = 8.0
+offset_right = -4.0
+offset_bottom = 31.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 24
+text = "Press 'C' to open upgrades"
+
 [node name="Player" parent="." instance=ExtResource("2_0b4ue")]
-position = Vector2(328, 264)
+position = Vector2(320, 256)
+
+[node name="EnemyArea" parent="." instance=ExtResource("6_1ainy")]
+position = Vector2(664, 368)
+scale = Vector2(1.28, 1.82833)
+MinEnemies = 2
+Cooldown = 30.0
+EnemyScene = ExtResource("3_f2txt")
+
+[node name="EnemyArea3" parent="." instance=ExtResource("6_1ainy")]
+position = Vector2(832, 688)
+scale = Vector2(2.64, 0.76276)
+MinEnemies = 3
+MaxEnemies = 4
+EnemyScene = ExtResource("3_f2txt")
+
+[node name="EnemyArea4" parent="." instance=ExtResource("6_1ainy")]
+position = Vector2(-352, 528)
+scale = Vector2(3.35672, 1.48755)
+MinEnemies = 3
+MaxEnemies = 5
+EnemyScene = ExtResource("3_f2txt")
+
+[node name="EnemyArea6" parent="." instance=ExtResource("6_1ainy")]
+position = Vector2(320, 584)
+scale = Vector2(1.59672, 0.967546)
+MinEnemies = 2
+EnemyScene = ExtResource("3_f2txt")
+
+[node name="EnemyArea7" parent="." instance=ExtResource("6_1ainy")]
+position = Vector2(320, 1008)
+scale = Vector2(2.51672, 0.527541)
+MinEnemies = 3
+MaxEnemies = 4
+EnemyScene = ExtResource("3_f2txt")
+
+[node name="EnemyArea5" parent="." instance=ExtResource("6_1ainy")]
+position = Vector2(-32, 216)
+scale = Vector2(1.67672, 1.04755)
+MinEnemies = 2
+EnemyScene = ExtResource("3_f2txt")
+
+[node name="EnemyArea2" parent="." instance=ExtResource("6_1ainy")]
+position = Vector2(1224, 352)
+scale = Vector2(1.55999, 1.48276)
+MinEnemies = 4
+MaxEnemies = 6
+EnemyScene = ExtResource("3_f2txt")

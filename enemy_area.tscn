@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccdyn7cfma8wq"]
+
+[ext_resource type="Script" uid="uid://pyyykom1msrc" path="res://EnemyArea.cs" id="1_6t840"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6td14"]
+size = Vector2(144, 128)
+
+[node name="EnemyArea" type="Area2D"]
+collision_layer = 0
+script = ExtResource("1_6t840")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_6td14")

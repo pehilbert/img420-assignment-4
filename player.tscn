@@ -263,6 +263,7 @@ size = Vector2(16, 12)
 script = ExtResource("1_4flbx")
 FireballScene = ExtResource("2_1jxqw")
 ExplosionScene = ExtResource("3_dw050")
+FireRate = 1.5
 
 [node name="EntityManager" parent="." instance=ExtResource("2_2hs0m")]
 position = Vector2(0, 16)
@@ -281,6 +282,6 @@ position = Vector2(0, 6)
 shape = SubResource("RectangleShape2D_onrkg")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(5, 5)
+zoom = Vector2(4, 4)
 drag_horizontal_enabled = true
 drag_vertical_enabled = true

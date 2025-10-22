@@ -25,6 +25,7 @@ public partial class Player : CharacterBody2D
 	public float FireRate = 1.0f;
 
 	public int Coins = 0;
+	public int NumUpgrades = 0;
 
 	[Signal]
 	public delegate void CoinsChangedEventHandler(int coins);
@@ -40,7 +41,11 @@ public partial class Player : CharacterBody2D
 
 		_fireTimer = new Timer();
 		_fireTimer.WaitTime = 1.0f / FireRate;
-		_fireTimer.Timeout += () => _canFire = true;
+		_fireTimer.Timeout += () => 
+		{
+			_canFire = true;
+			_fireTimer.WaitTime = 1.0f / FireRate;
+		};
 		AddChild(_fireTimer);
 	}
 
