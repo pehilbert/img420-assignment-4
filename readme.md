@@ -1,6 +1,9 @@
 # Dungeon Game
 In this game, wander around a dungeon and defeat skeletons, earning coins to upgrade yourself. However, the more you upgrade, the more difficult the game gets! Good luck!
 
+## How to Run
+To run, you must first open this project in Godot (.NET version). Then, simply build and run from Godot's UI.
+
 ## Controls
 WASD - Move
 Left click - Shoot fireball
